@@ -13,7 +13,7 @@ license = "MIT"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest >= 9", "pytest-cov", "ruff"]
+dev = ["pytest >= 9", "pytest-cov", "ruff", "mypy"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ci_log_analyzer"]
