@@ -16,12 +16,14 @@ class TestCase:
     status: Status
     duration: float
     message: str | None = None
+    __test__ = False
 
 
 @dataclass
 class TestSuiteResult:
     name: str
     test_cases: list[TestCase] = field(default_factory=list)
+    __test__ = False
 
 
 class LogLevel(StrEnum):
