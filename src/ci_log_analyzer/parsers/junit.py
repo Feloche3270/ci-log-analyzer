@@ -33,8 +33,8 @@ def _parse_testcase(element: ET.Element) -> TestCase:
         case_duration = float(element.get("time", "0.0"))
     except ValueError as err:
         raise ParseError(
-            f"Invalid time: '{element.get('time')}' in test case {case_name} cannot be" 
-            "converted to float type."
+            f"Invalid time: '{element.get('time')}' in test case {case_name} cannot be"
+            " converted to float type."
         ) from err
 
     test_case = TestCase(
