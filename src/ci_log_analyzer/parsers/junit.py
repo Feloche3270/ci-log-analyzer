@@ -1,19 +1,23 @@
 import xml.etree.ElementTree as ET
 
 from ci_log_analyzer.errors import ParseError
-from ci_log_analyzer.models import Status, TestCase
-
-# def parse_junit(path: Path) -> list[TestSuiteResult]:
-
-
-# def _parse_suite(element) -> TestSuiteResult:
-
+from ci_log_analyzer.models import Status, TestCase, TestSuiteResult
 
 TAG_TO_STATUS = {
     "failure": Status.FAILED,
     "error": Status.ERROR,
     "skipped": Status.SKIPPED,
 }
+
+# def parse_junit(path: Path) -> list[TestSuiteResult]:
+
+
+def _parse_suite(element: ET.Element) -> TestSuiteResult:
+    suite_name = element.get("name", "")
+    test_cases = [
+        (_parse_testcase(test_case)) for test_case in element.findall("testcase")
+    ]
+    return TestSuiteResult(suite_name, test_cases)
 
 
 def _parse_testcase(element: ET.Element) -> TestCase:
@@ -37,7 +41,4 @@ def _parse_testcase(element: ET.Element) -> TestCase:
             " converted to float type."
         ) from err
 
-    test_case = TestCase(
-        case_name, case_classname, case_status, case_duration, case_message
-    )
-    return test_case
+    return TestCase(case_name, case_classname, case_status, case_duration, case_message)
