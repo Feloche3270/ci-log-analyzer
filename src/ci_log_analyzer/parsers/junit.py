@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 from ci_log_analyzer.errors import ParseError
 from ci_log_analyzer.models import Status, TestCase, TestSuiteResult
@@ -9,13 +10,29 @@ TAG_TO_STATUS = {
     "skipped": Status.SKIPPED,
 }
 
-# def parse_junit(path: Path) -> list[TestSuiteResult]:
+
+def parse_junit(path: Path) -> list[TestSuiteResult]:
+    try:
+        tree = ET.parse(path)
+    except ET.ParseError as err:
+        raise ParseError(f"File {path} cannot be parsed") from err
+    except OSError as err:
+        raise ParseError(f"File {path} cannot be opened") from err
+
+    root = tree.getroot()
+
+    if root.tag == "testsuites":
+        return [_parse_suite(test_suite) for test_suite in root.findall("testsuite")]
+    elif root.tag == "testsuite":
+        return [_parse_suite(root)]
+    else:
+        raise ParseError(f"Not a JUnit file: {root.tag}")
 
 
 def _parse_suite(element: ET.Element) -> TestSuiteResult:
     suite_name = element.get("name", "")
     test_cases = [
-        (_parse_testcase(test_case)) for test_case in element.findall("testcase")
+        _parse_testcase(test_case) for test_case in element.findall("testcase")
     ]
     return TestSuiteResult(suite_name, test_cases)
 
