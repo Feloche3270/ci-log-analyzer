@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="1" skipped="1" tests="4" time="0.075" timestamp="2026-10-29T18:40:51.230914+01:00" hostname="ci-runner"><testcase classname="tests.test_fixtures" name="test_pass" time="0.001" /><testcase classname="tests.test_fixtures" name="test_fail" time="0.001"><failure message="assert 1 == 2">def test_fail():
+&gt;       assert 1 == 2
+E       assert 1 == 2
+
+tests\test_fixtures.py:7: AssertionError</failure></testcase><testcase classname="tests.test_fixtures" name="test_with_value_error" time="0.000"><error message="failed on setup with &quot;ValueError: Value need to be a int&quot;">@pytest.fixture
+    def value_error():
+&gt;       raise ValueError("Value need to be a int")
+E       ValueError: Value need to be a int
+
+tests\test_fixtures.py:11: ValueError</error></testcase><testcase classname="tests.test_fixtures" name="test_skip" time="0.000"><skipped type="pytest.skip" message="Skipping french test only">C:\tests\test_fixtures.py:19: Skipping french test only</skipped></testcase></testsuite></testsuites>
