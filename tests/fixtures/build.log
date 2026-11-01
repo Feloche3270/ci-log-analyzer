@@ -1,0 +1,18 @@
+2026-11-01 10:01:12 INFO Starting build
+2026-11-01 10:01:13 INFO Compiling 350 files
+2026-11-01 10:01:15 WARN Deprecated API used in src/utils.py
+2026-11-01 10:01:19 ERROR Test failed : test_logout (timeout after 10 s)
+2026-11-01 10:01:21 INFO Build finished with 1 error
+2026-11-01 10:05:03 [ERROR] Failed to compile (timeout after 5 s)
+2026-11-01 10:05:33 ERROR:root:Database connection lost
+2026-11-01 10:06:03 WARNING Deprecated API used in src/ci_log_analyzer
+2026-11-01 10:06:13 ERROR Timeout after 12 s in /app/tests/test_smoke.py (job 50991)
+2026-11-01 10:06:28 ERROR Timeout after 15 s in /app/tests/test_smoke.py (job 50000)
+2026-11-01 10:06:32 ERROR Timeout after 4 s in /app/tests/test_junit.py (job 50996)
+2026-11-01 10:06:36 ERROR Timeout after 4 s in /app/tests/test_models.py (job 50996)
+2026-11-01 10:06:37 test_error_handling
+
+2026-11-01 10:06:38 INFO 
+2026-11-01 10:06:38 failed : test_login 
+2026-11-01 10:06:38 error : Database connection lost
+2026-11-01 10:06:38 FAILED test/test_junit.xml
