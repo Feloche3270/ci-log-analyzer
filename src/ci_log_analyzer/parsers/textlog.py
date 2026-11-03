@@ -1,5 +1,7 @@
 import re
+from pathlib import Path
 
+from ci_log_analyzer.errors import ParseError
 from ci_log_analyzer.models import LogEvent, LogLevel
 
 NUMBER_PATTERN = re.compile(r"\d+(?:\.\d+)?")
@@ -33,3 +35,20 @@ def _parse_line(line: str, line_number: int) -> LogEvent | None:
     level = KEYWORD_TO_LEVEL[match.group(1)]
     message = match.group(2).strip()
     return LogEvent(line_number, level, message)
+
+
+def parse_textlog(path: Path) -> list[LogEvent]:
+    list_logevent = []
+    try:
+        with path.open(encoding="utf-8") as f:
+            for line_number, line in enumerate(f, start=1):
+                log_event = _parse_line(line, line_number)
+                if log_event:
+                    list_logevent.append(log_event)
+    except FileNotFoundError as err:
+        raise ParseError(f"File {path} cannot be found") from err
+    except OSError as err:
+        raise ParseError(f"File {path} cannot be opened") from err
+    except UnicodeDecodeError as err:
+        raise ParseError(f"In file {path} a byte isn't valid UTF-8") from err
+    return list_logevent
