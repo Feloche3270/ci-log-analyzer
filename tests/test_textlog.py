@@ -1,7 +1,14 @@
+from pathlib import Path
+
 import pytest
 
+from ci_log_analyzer.errors import ParseError
 from ci_log_analyzer.models import LogEvent, LogLevel
-from ci_log_analyzer.parsers.textlog import _parse_line, normalize_message
+from ci_log_analyzer.parsers.textlog import (
+    _parse_line,
+    normalize_message,
+    parse_textlog,
+)
 
 
 def test_timestamp_replace_before_numbers():
@@ -111,3 +118,66 @@ def test_level_result(level, loglevel):
     result = _parse_line(level, 1)
     assert result is not None
     assert result.level is loglevel
+
+
+def test_length_logevent():
+    path1 = Path(__file__).parent / "fixtures/build.log"
+    result = parse_textlog(path1)
+    assert len(result) == 16
+
+
+def test_exact_logevent():
+    path1 = Path(__file__).parent / "fixtures/build.log"
+    result = parse_textlog(path1)
+    assert result[0] == LogEvent(
+        3, LogLevel.WARNING, "Deprecated API used in src/utils.py"
+    )
+    assert result[3] == LogEvent(7, LogLevel.ERROR, "root:Database connection lost")
+    assert result[13] == LogEvent(19, LogLevel.ERROR, "root")
+
+
+def test_pytest_output():
+    path1 = Path(__file__).parent / "fixtures/pytest_output.log"
+    result = parse_textlog(path1)
+    assert result[0] == LogEvent(
+        11, LogLevel.FAIL, "tests/test_demo_fail.py::test_fail - assert 1 == 2"
+    )
+
+
+def test_empty_file(tmp_path):
+    file = tmp_path / "false_textlog.log"
+    file.write_text("", encoding="utf-8")
+    result = parse_textlog(file)
+    assert result == []
+
+
+def test_no_level_line(tmp_path):
+    content = (
+        "2026-11-01 10:01:12 INFO Starting build\n"
+        "2026-11-01 10:01:13 INFO Compiling 350 files\n"
+        "2026-11-01 10:01:21 INFO Build finished with 1 error\n"
+        "2026-11-01 10:06:38 INFO "
+    )
+    file = tmp_path / "false_textlog.log"
+    file.write_text(content, encoding="utf-8")
+    result = parse_textlog(file)
+    assert result == []
+
+
+def test_textlog_not_valid_path():
+    path = Path(__file__).parent / "false_path_textlog.log"
+    with pytest.raises(ParseError, match="cannot be found"):
+        parse_textlog(path)
+
+
+def test_textlog_directory_raise(tmp_path):
+    path = tmp_path
+    with pytest.raises(ParseError, match="cannot be opened"):
+        parse_textlog(path)
+
+
+def test_invalid_utf8(tmp_path):
+    file = tmp_path / "false_textlog.log"
+    file.write_bytes(b"\xff\xfe invalid")
+    with pytest.raises(ParseError, match="a byte isn't valid UTF-8"):
+        parse_textlog(file)
