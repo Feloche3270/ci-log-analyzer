@@ -1,4 +1,7 @@
-from ci_log_analyzer.parsers.textlog import normalize_message
+import pytest
+
+from ci_log_analyzer.models import LogEvent, LogLevel
+from ci_log_analyzer.parsers.textlog import _parse_line, normalize_message
 
 
 def test_timestamp_replace_before_numbers():
@@ -7,8 +10,8 @@ def test_timestamp_replace_before_numbers():
 
 
 def test_iso_timestamp():
-    normalize_iso_timestamp = normalize_message("at 2026-10-29T18:40:51.5Z")
-    assert normalize_iso_timestamp == "at <TIMESTAMP>"
+    result = normalize_message("at 2026-10-29T18:40:51.5Z")
+    assert result == "at <TIMESTAMP>"
 
 
 def test_unix_path():
@@ -27,12 +30,84 @@ def test_integer_decimal():
 
 
 def test_grouping():
-    result1 = normalize_message("Timeout after 4.567 s in ... (job 50996)")
-    result2 = normalize_message("Timeout after 5 s in ... (job 456000)")
-    assert result1 == "Timeout after <N> s in ... (job <N>)"
+    result1 = normalize_message(
+        "Timeout after 4.567 s in /app/tests/test_smoke.py (job 50996)"
+    )
+    result2 = normalize_message(
+        r"Timeout after 5 s in \app\tests\test_models.py (job 456000)"
+    )
+    assert result1 == "Timeout after <N> s in <PATH> (job <N>)"
     assert result1 == result2
 
 
 def test_untouched():
     result = normalize_message("Database connection lost")
     assert result == "Database connection lost"
+
+
+def test_plain_format():
+    result = _parse_line("2026-11-01 10:06:13 ERROR Timeout after 12 s", 9)
+    assert result == LogEvent(9, LogLevel.ERROR, "Timeout after 12 s")
+
+
+def test_maven():
+    result = _parse_line("[ERROR] Failed to compile", 6)
+    assert result == LogEvent(6, LogLevel.ERROR, "Failed to compile")
+
+
+def test_python_logging():
+    result = _parse_line("ERROR:root:Database connection lost", 7)
+    assert result == LogEvent(7, LogLevel.ERROR, "root:Database connection lost")
+
+
+def test_warn_warning():
+    result1 = _parse_line("WARN Deprecated API used in src/utils.py", 3)
+    result2 = _parse_line("WARNING Deprecated API used in src/ci_log_analyzer", 8)
+    assert result1 is not None
+    assert result2 is not None
+    assert result1.level is LogLevel.WARNING
+    assert result2.level is LogLevel.WARNING
+
+
+def test_pytest_fail():
+    result = _parse_line("FAILED tests/test_demo_fail.py::test_fail - assert 1 == 2", 1)
+    assert result is not None
+    assert result.level is LogLevel.FAIL
+
+
+def test_space_end_msg():
+    result = _parse_line("ERROR Failed to compile ", 6)
+    assert result is not None
+    assert result.message == "Failed to compile"
+
+
+@pytest.mark.parametrize(
+    ("line"),
+    [
+        ("INFO Starting build"),
+        (""),
+        ("FAILURES"),
+        ("test_error_handling"),
+        ("TEST_ERROR_HANDLING"),
+        ("1 failed, 1 passed"),
+    ],
+)
+def test_none_result(line):
+    result = _parse_line(line, 1)
+    assert result is None
+
+
+@pytest.mark.parametrize(
+    ("level", "loglevel"),
+    [
+        ("ERROR", LogLevel.ERROR),
+        ("WARN", LogLevel.WARNING),
+        ("WARNING", LogLevel.WARNING),
+        ("FAIL", LogLevel.FAIL),
+        ("FAILED", LogLevel.FAIL),
+    ],
+)
+def test_level_result(level, loglevel):
+    result = _parse_line(level, 1)
+    assert result is not None
+    assert result.level is loglevel
