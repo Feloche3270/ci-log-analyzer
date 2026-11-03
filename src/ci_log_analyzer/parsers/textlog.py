@@ -1,6 +1,6 @@
 import re
 
-from ci_log_analyzer.models import LogLevel
+from ci_log_analyzer.models import LogEvent, LogLevel
 
 NUMBER_PATTERN = re.compile(r"\d+(?:\.\d+)?")
 PATH_PATTERN = re.compile(r"\S*[/\\]\S*")
@@ -24,3 +24,12 @@ def normalize_message(message: str) -> str:
     normalized_number = NUMBER_PATTERN.sub("<N>", normalized_path)
 
     return normalized_number
+
+
+def _parse_line(line: str, line_number: int) -> LogEvent | None:
+    match = LOG_LINE_PATTERN.search(line)
+    if not match:
+        return None
+    level = KEYWORD_TO_LEVEL[match.group(1)]
+    message = match.group(2).strip()
+    return LogEvent(line_number, level, message)
