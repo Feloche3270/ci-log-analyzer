@@ -29,3 +29,6 @@ select = ["E","F","I","UP","B"]
 minversion = "9.0"
 addopts = ["-ra", "-q"]
 testpaths = ["tests"]
+
+[tool.mypy]
+check_untyped_defs = true
