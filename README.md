@@ -14,14 +14,14 @@ Work in progress. Started October 2026.
   - maps passed, failed, error and skipped tests, with durations and messages
   - ignores unknown elements (`<system-out>`, `<properties>`)
   - raises a clear error on missing files, malformed XML or invalid data
-- Unit and end-to-end tests on real pytest JUnit output (27 tests)
+- Unit and end-to-end tests on real pytest JUnit output
+- Plain-text build log parser (error and warning detection, message normalisation for grouping)
+- Analysis: totals, pass rate, slowest tests, most frequent errors
 
 ## In progress
-- Plain-text build log parser (error and warning detection, message normalisation for grouping)
+- Terminal, Markdown and JSON reports
 
 ## Next steps
-- Analysis: totals, pass rate, slowest tests, most frequent errors
-- Markdown and JSON reports
 - Command-line interface
 - GitHub Actions pipeline (lint, type check, tests)
 
