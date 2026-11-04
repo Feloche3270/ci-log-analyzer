@@ -43,3 +43,18 @@ class LogEvent:
 class Report:
     suites: list[TestSuiteResult] = field(default_factory=list)
     log_events: list[LogEvent] = field(default_factory=list)
+
+
+@dataclass
+class ErrorGroup:
+    pattern: str
+    count: int
+    line_numbers: list[int] = field(default_factory=list)
+
+
+@dataclass
+class Summary:
+    counts: dict[Status, int]
+    pass_rate: float | None
+    slowest: list[TestCase] = field(default_factory=list)
+    top_errors: list[ErrorGroup] = field(default_factory=list)
