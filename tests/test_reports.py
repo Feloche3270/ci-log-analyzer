@@ -1,9 +1,15 @@
 import json
+from pathlib import Path
 
 import pytest
 
 from ci_log_analyzer.models import ErrorGroup, Status, Summary, TestCase
-from ci_log_analyzer.reports import _format_line_numbers, _format_pass_rate, render_json
+from ci_log_analyzer.reports import (
+    _format_line_numbers,
+    _format_pass_rate,
+    render_json,
+    render_terminal,
+)
 
 
 @pytest.fixture
@@ -129,3 +135,21 @@ def test_slowest_top_errors_empty(empty_summary):
     result_loaded = json.loads(result)
     assert result_loaded["slowest"] == []
     assert result_loaded["top_errors"] == []
+
+
+def test_terminal_with_known_summary(known_summary):
+    result = render_terminal(known_summary)
+    path_expected_terminal = (
+        Path(__file__).parent / "fixtures/expected_terminal_report_known_summary.txt"
+    )
+    expected_result = path_expected_terminal.read_text(encoding="utf-8")
+    assert result == expected_result
+
+
+def test_terminal_with_empty_summary(empty_summary):
+    result = render_terminal(empty_summary)
+    path_expected_terminal = (
+        Path(__file__).parent / "fixtures/expected_terminal_report_empty_summary.txt"
+    )
+    expected_result = path_expected_terminal.read_text(encoding="utf-8")
+    assert result == expected_result

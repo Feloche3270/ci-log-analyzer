@@ -1,0 +1,23 @@
+CI LOG ANALYZER
+===============
+
+TESTS        5
+  passed     1
+  failed     2
+  error      1
+  skipped    1
+PASS RATE    25.00%  (skipped tests excluded)
+
+SLOWEST TESTS
+  DURATION   NAME              STATUS
+  1.40 s     test_fail2        failed
+  1.00 s     test_fail         failed
+  0.20 s     test_skipped      skipped
+
+TOP ERRORS
+  3x          <PATH>
+              lines 14, 15, 20
+  2x          Timeout after <N> s in <PATH> (job <N>)
+              lines 9, 16
+  1x          Deprecated API used in <PATH>
+              lines 8
