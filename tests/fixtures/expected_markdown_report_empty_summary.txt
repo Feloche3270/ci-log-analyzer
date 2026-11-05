@@ -1,0 +1,18 @@
+# CI LOG ANALYZER report
+
+## Tests by status
+
+| STATUS | COUNT |
+|---|---:|
+| passed | 0 |
+| failed | 0 |
+| error | 0 |
+| skipped | 0 |
+
+**Pass rate:** n/a (skipped tests excluded)
+
+## Slowest tests
+No tests found
+
+## Top errors
+No errors found

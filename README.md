@@ -17,12 +17,12 @@ Work in progress. Started October 2026.
 - Unit and end-to-end tests on real pytest JUnit output
 - Plain-text build log parser (error and warning detection, message normalisation for grouping)
 - Analysis: totals, pass rate, slowest tests, most frequent errors
+- Reports: Terminal summary, Markdown (tables) and JSON (full data)
 
 ## In progress
-- Terminal, Markdown and JSON reports
+- Command-line interface
 
 ## Next steps
-- Command-line interface
 - GitHub Actions pipeline (lint, type check, tests)
 
 ## Tech

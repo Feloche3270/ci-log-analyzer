@@ -1,0 +1,28 @@
+# CI LOG ANALYZER report
+
+## Tests by status
+
+| STATUS | COUNT |
+|---|---:|
+| passed | 1 |
+| failed | 2 |
+| error | 1 |
+| skipped | 1 |
+
+**Pass rate:** 25.00% (skipped tests excluded)
+
+## Slowest tests
+
+| NAME | STATUS | DURATION |
+|---|---|---:|
+| test_fail2\| | failed | 1.40 s |
+| test_fail\| | failed | 1.00 s |
+| test_skipped | skipped | 0.20 s |
+
+## Top errors
+
+| COUNT | PATTERN | LINES |
+|---:|---|---|
+| 3 | `<PATH>` | 14, 15, 20 |
+| 2 | `Timeout after \| <N> s in <PATH> (job <N>)` | 9, 16 |
+| 1 | `Deprecated\| API used in <PATH>` | 8 |
