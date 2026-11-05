@@ -8,6 +8,7 @@ from ci_log_analyzer.reports import (
     _format_line_numbers,
     _format_pass_rate,
     render_json,
+    render_markdown,
     render_terminal,
 )
 
@@ -30,6 +31,28 @@ def known_summary():
         ErrorGroup("<PATH>", 3, [14, 15, 20]),
         ErrorGroup("Timeout after <N> s in <PATH> (job <N>)", 2, [9, 16]),
         ErrorGroup("Deprecated API used in <PATH>", 1, [8]),
+    ]
+    return Summary(counts, pass_rate, slowest, top_errors)
+
+
+@pytest.fixture
+def known_summary_with_pipes():
+    counts = {
+        Status.PASSED: 1,
+        Status.FAILED: 2,
+        Status.ERROR: 1,
+        Status.SKIPPED: 1,
+    }
+    pass_rate = 0.25
+    slowest = [
+        TestCase("test_fail2|", "tests.test_fixtures", Status.FAILED, 1.4),
+        TestCase("test_fail|", "tests.test_fixtures", Status.FAILED, 1.0),
+        TestCase("test_skipped", "tests.test_fixtures", Status.SKIPPED, 0.2),
+    ]
+    top_errors = [
+        ErrorGroup("<PATH>", 3, [14, 15, 20]),
+        ErrorGroup("Timeout after | <N> s in <PATH> (job <N>)", 2, [9, 16]),
+        ErrorGroup("Deprecated| API used in <PATH>", 1, [8]),
     ]
     return Summary(counts, pass_rate, slowest, top_errors)
 
@@ -152,4 +175,31 @@ def test_terminal_with_empty_summary(empty_summary):
         Path(__file__).parent / "fixtures/expected_terminal_report_empty_summary.txt"
     )
     expected_result = path_expected_terminal.read_text(encoding="utf-8")
+    assert result == expected_result
+
+
+def test_markdown_with_known_summary(known_summary):
+    result = render_markdown(known_summary)
+    path_expected_markdown = (
+        Path(__file__).parent / "fixtures/expected_markdown_report_known_summary.txt"
+    )
+    expected_result = path_expected_markdown.read_text(encoding="utf-8")
+    assert result == expected_result
+
+
+def test_markdown_with_empty_summary(empty_summary):
+    result = render_markdown(empty_summary)
+    path_expected_terminal = (
+        Path(__file__).parent / "fixtures/expected_markdown_report_empty_summary.txt"
+    )
+    expected_result = path_expected_terminal.read_text(encoding="utf-8")
+    assert result == expected_result
+
+
+def test_markdown_with_pipes(known_summary_with_pipes):
+    result = render_markdown(known_summary_with_pipes)
+    path_expected_markdown = (
+        Path(__file__).parent / "fixtures/expected_markdown_report_with_pipes.txt"
+    )
+    expected_result = path_expected_markdown.read_text(encoding="utf-8")
     assert result == expected_result
