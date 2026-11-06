@@ -12,6 +12,9 @@ readme = "README.md"
 license = "MIT"
 dependencies = []
 
+[project.scripts]
+cilog = "ci_log_analyzer.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest >= 9", "pytest-cov", "ruff", "mypy"]
 
