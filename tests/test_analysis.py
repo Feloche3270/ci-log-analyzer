@@ -57,6 +57,7 @@ def list_of_suites_without_skip_passed():
     ]
 
 
+# ---_all_test_cases----------------------------------------------------------------
 def test_three_suites(list_of_suites):
     result = _all_test_cases(list_of_suites)
     assert result == [
@@ -87,6 +88,7 @@ def test_empty_then_one(list_of_suites_without_skip_passed):
     ]
 
 
+# ---count_by_status----------------------------------------------------------------
 def test_count_mixed_statuses(list_of_suites):
     result = count_by_status(list_of_suites)
     assert result == {
@@ -117,6 +119,7 @@ def test_no_cases():
     }
 
 
+# ---pass_rate----------------------------------------------------------------
 def test_025_passed(list_of_suites):
     result = pass_rate(list_of_suites)
     assert result == 0.25
@@ -173,6 +176,7 @@ def test_ratio_float():
     assert result == pytest.approx(2 / 3)
 
 
+# ---slowest_tests----------------------------------------------------------------
 def test_slowest(list_of_suites):
     result = slowest_tests(list_of_suites, 3)
     assert result == [
@@ -220,6 +224,7 @@ def test_no_test_case_slowest():
     assert result == []
 
 
+# ---top_errors----------------------------------------------------------------
 def test_group_error():
     list_log_error = [
         LogEvent(
@@ -336,6 +341,7 @@ def test_only_warning():
     assert result == []
 
 
+# ---analyze----------------------------------------------------------------
 def test_analyze(list_of_suites):
     list_log_error = [
         LogEvent(8, LogLevel.ERROR, "Deprecated API used in src/ci_log_analyzer"),

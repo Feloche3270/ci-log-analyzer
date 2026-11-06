@@ -69,6 +69,7 @@ def empty_summary():
     return Summary(counts, pass_rate)
 
 
+# ---_format_pass_rate----------------------------------------------------------------
 def test_passrate_percent():
     percent = 0.25
     result = _format_pass_rate(percent)
@@ -80,6 +81,7 @@ def test_passrate_none():
     assert result == "n/a"
 
 
+# ---_format_line_numbers--------------------------------------------------------------
 def test_format_line_less_than_five():
     list_numbers = [9]
     result = _format_line_numbers(list_numbers)
@@ -103,6 +105,7 @@ def test_format_line_empty():
     assert result == ""
 
 
+# ---render_json----------------------------------------------------------------
 def test_json_content(known_summary):
     result = render_json(known_summary)
     assert json.loads(result) == {
@@ -160,6 +163,7 @@ def test_slowest_top_errors_empty(empty_summary):
     assert result_loaded["top_errors"] == []
 
 
+# ---render_terminal----------------------------------------------------------------
 def test_terminal_with_known_summary(known_summary):
     result = render_terminal(known_summary)
     path_expected_terminal = (
@@ -178,6 +182,7 @@ def test_terminal_with_empty_summary(empty_summary):
     assert result == expected_result
 
 
+# ---render_markdown----------------------------------------------------------------
 def test_markdown_with_known_summary(known_summary):
     result = render_markdown(known_summary)
     path_expected_markdown = (
