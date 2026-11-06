@@ -11,6 +11,7 @@ from ci_log_analyzer.parsers.textlog import (
 )
 
 
+# ---normalize_message----------------------------------------------------------------
 def test_timestamp_replace_before_numbers():
     result = normalize_message("at 2026-11-01 10:06:13")
     assert result == "at <TIMESTAMP>"
@@ -52,6 +53,7 @@ def test_untouched():
     assert result == "Database connection lost"
 
 
+# ---_parse_line----------------------------------------------------------------
 def test_plain_format():
     result = _parse_line("2026-11-01 10:06:13 ERROR Timeout after 12 s", 9)
     assert result == LogEvent(9, LogLevel.ERROR, "Timeout after 12 s")
@@ -120,6 +122,7 @@ def test_level_result(level, loglevel):
     assert result.level is loglevel
 
 
+# ---_parse_textlog----------------------------------------------------------------
 def test_length_logevent():
     path1 = Path(__file__).parent / "fixtures/build.log"
     result = parse_textlog(path1)

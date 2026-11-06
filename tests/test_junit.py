@@ -8,6 +8,7 @@ from ci_log_analyzer.models import Status
 from ci_log_analyzer.parsers.junit import _parse_suite, _parse_testcase, parse_junit
 
 
+# ---_parse_testcase----------------------------------------------------------------
 def test_testcase_passed():
     passed_testcase = ET.fromstring(
         '<testcase classname="tests.test_fixtures" name="passed_testcase" time="0.5">'
@@ -96,6 +97,7 @@ def test_testcase_unknown_child():
     assert result.status is Status.PASSED
 
 
+# ---_parse_suite----------------------------------------------------------------
 def test_testsuite_missing_name():
     missing_name = ET.fromstring(
         "<testsuite>"
@@ -194,6 +196,7 @@ def test_testsuite_broken_testcase():
         _parse_suite(invalid_time)
 
 
+# ---_parse_junit----------------------------------------------------------------
 def test_parse_junit_not_valid_path():
     path = Path(__file__).parent / "fixtures/junit_mixed_false.xml"
     with pytest.raises(ParseError, match="cannot be opened"):
