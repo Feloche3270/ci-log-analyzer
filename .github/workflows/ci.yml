@@ -25,4 +25,4 @@ jobs:
         run: pytest --junitxml test_results.xml
       - name: Analyze the XML file and create a Markdown report
         if: ${{ always() }}
-        run: cilog analyze test_results.xml --format md >> $"GITHUB_STEP_SUMMARY"
+        run: cilog analyze test_results.xml --format md >> "$GITHUB_STEP_SUMMARY"
