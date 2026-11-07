@@ -9,10 +9,10 @@ TESTS        5
 PASS RATE    25.00%  (skipped tests excluded)
 
 SLOWEST TESTS
-  DURATION   NAME              STATUS
-  1.40 s     test_fail2        failed
-  1.00 s     test_fail         failed
-  0.20 s     test_skipped      skipped
+  DURATION   STATUS     NAME
+  1.40 s     failed     test_fail2
+  1.00 s     failed     test_fail
+  0.20 s     skipped    test_skipped
 
 TOP ERRORS
   3x          <PATH>
