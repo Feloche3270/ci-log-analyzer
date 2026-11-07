@@ -18,15 +18,14 @@ Work in progress. Started October 2026.
 - Plain-text build log parser (error and warning detection, message normalisation for grouping)
 - Analysis: totals, pass rate, slowest tests, most frequent errors
 - Reports: Terminal summary, Markdown (tables) and JSON (full data)
-- Command-line interface: `cilog analyze`, with format, output, top-N and exit-code options
+- Command-line interface: `cilog analyze`, with format, output, top-N and exit-code options, coverage 95%
 - Unit and end-to-end tests on real pytest JUnit output and build logs
 - GitHub Actions pipeline on Python 3.12–3.14 (lint, format, type check, tests), with the tool's own report in the job summary
 
 ## In progress
-- Command-line interface
+- Usage guide and design choices
 
 ## Next steps
-- Usage guide and design choices
 - Optional: AI-generated summary of the top failures
 
 ## Tech
