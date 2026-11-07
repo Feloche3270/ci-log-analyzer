@@ -13,3 +13,6 @@ scratch/
 
 # env files
 .env
+
+#xml files
+test_results.xml
