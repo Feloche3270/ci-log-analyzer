@@ -1,0 +1,28 @@
+---
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12","3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install CI LOG ANALYZER project
+        run: pip install -e ".[dev]"
+      - name: Running ruff check .
+        run: ruff check .
+      - name: Running ruff format --check .
+        run: ruff format --check .
+      - name: Running mypy src tests
+        run: mypy src tests
+      - name: Writing a JUnit report
+        run: pytest --junitxml test_results.xml
+      - name: Analyze the XML file and create a Markdown report
+        if: ${{ always() }}
+        run: cilog analyze test_results.xml --format md >> "$GITHUB_STEP_SUMMARY"
