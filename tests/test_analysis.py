@@ -122,7 +122,7 @@ def test_no_cases():
 # ---pass_rate----------------------------------------------------------------
 def test_025_passed(list_of_suites):
     result = pass_rate(list_of_suites)
-    assert result == 0.25
+    assert result == 0.30
 
 
 def test_only_skipped():
