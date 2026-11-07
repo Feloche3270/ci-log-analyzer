@@ -30,8 +30,17 @@ select = ["E","F","I","UP","B"]
 
 [tool.pytest]
 minversion = "9.0"
-addopts = ["-ra", "-q"]
+addopts = ["-ra", "-q", "--cov"]
 testpaths = ["tests"]
 
 [tool.mypy]
 check_untyped_defs = true
+
+[tool.coverage.run]
+branch = true
+omit = ["*/__main__.py"]
+source = ["ci_log_analyzer"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 95
