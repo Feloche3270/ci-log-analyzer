@@ -62,14 +62,14 @@ def render_terminal(summary: Summary) -> str:
         lines.append(
             f"{' ' * INDENT_TERMINAL}"
             f"{'DURATION':<{DURATION_WIDTH_TERMINAL}}"
-            f"{'NAME':<{NAME_WIDTH_TERMINAL}}STATUS"
+            f"{'STATUS':<{STATUS_WIDTH_TERMINAL}}NAME"
         )
         for test_case in summary.slowest:
             duration_text = f"{test_case.duration:.2f} s"
             lines.append(
                 f"{' ' * INDENT_TERMINAL}"
                 f"{duration_text:<{DURATION_WIDTH_TERMINAL}}"
-                f"{test_case.name:<{NAME_WIDTH_TERMINAL}}{test_case.status}"
+                f"{test_case.status:<{STATUS_WIDTH_TERMINAL}}{test_case.name}"
             )
     lines.append("")
     lines.append("TOP ERRORS")
